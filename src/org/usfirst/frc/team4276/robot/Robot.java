@@ -1,0 +1,69 @@
+
+package org.usfirst.frc.team4276.robot;
+
+import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
+
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the manifest file in the resource
+ * directory.
+ */
+public class Robot extends IterativeRobot {
+	TankDrive driver;
+	Arm armer;
+	LidarSpin spinny;
+	LIDAR mylid;
+	Shooter shoot;
+	LEDOut lead;
+    /**
+     * This function is run when the robot is first started up and should be
+     * used for any initialization code.
+     */
+    public void robotInit() {
+
+    	driver = new TankDrive(3,0,4,1,5,2);
+    	armer = new Arm(6,7,8);
+    	//spinny = new LidarSpin(10);
+    	mylid = new LIDAR(Port.kMXP);
+    	mylid.start(20);
+    	shoot = new Shooter();
+    	lead = new LEDOut(9,8,7,6);
+    }
+
+    /**
+     * This function is called periodically during autonomous
+     */
+    public void autonomousPeriodic() {
+
+    }
+
+    /**
+     * This function is called periodically during operator control
+     */
+    public void teleopPeriodic() {
+    	
+    	
+    	
+    	armer.Prime();
+    	armer.Spin();
+    	//spinny.spinnerex();
+    	driver.Drive();
+    	//driver.drive();
+    	driver.fullpower();
+    	shoot.run();
+    	lead.output();
+        
+    }
+    
+    /**
+     * This function is called periodically during test mode
+     */
+    public void testPeriodic() {
+    
+    }
+    
+}
