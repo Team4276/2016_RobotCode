@@ -7,7 +7,7 @@ public class XBox {
     static int Back=7,Start=8;
     static int LStick=9,RStick=10;
 
-    //Note: Left trigger and right trigger are Axis 3  (Left is 0 to 1, Right is 0 to -1).
+
 static int LStickX =6;
 static int LStickY =1;
 static int LTrigger = 2;
