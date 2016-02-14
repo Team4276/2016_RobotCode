@@ -19,6 +19,13 @@ public class Robot extends IterativeRobot {
 	LIDAR mylid;
 	Shooter shoot;
 	LEDOut lead;
+	public static int g_nSequenceLidar = 0;
+	public static double g_lidarDistanceCentimeters = 0.0;
+	
+	public static int g_nSequenceVisionSystem = 0;
+	public static boolean g_isVisionSystemGoalDetected = false;
+	public static double g_visionSystemAngleRobotToGoal = -181.0;
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -26,12 +33,17 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 
     	driver = new TankDrive(3,0,4,1,5,2);
-    	armer = new Arm(6,7,8);
+    	//armer = new Arm(6,7,8);
     	//spinny = new LidarSpin(10);
     	mylid = new LIDAR(Port.kMXP);
     	mylid.start(20);
     	shoot = new Shooter();
     	lead = new LEDOut(9,8,7,6);
+    	
+    	//
+    	JVisionSystemReceiverRunnable visionSystemRunnable = new JVisionSystemReceiverRunnable();
+        Thread visionSystemThread = new Thread(visionSystemRunnable);
+        visionSystemThread.start();   
     }
 
     /**
@@ -48,8 +60,8 @@ public class Robot extends IterativeRobot {
     	
     	
     	
-    	armer.Prime();
-    	armer.Spin();
+    	//armer.Prime();
+    	//armer.Spin();
     	//spinny.spinnerex();
     	driver.Drive();
     	//driver.drive();

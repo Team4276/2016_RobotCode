@@ -56,14 +56,15 @@ public class LIDAR implements PIDSource{
 	public void update() {
 			
 		i2c.write(LIDAR_CONFIG_REGISTER, 0x4); // Initiate measurement
-		Timer.delay(0.2); // Delay for measurement to be taken
+		Timer.delay(0.012); // Delay for measurement to be taken
 		
 		SmartDashboard.putBoolean("LIDAR Aborted",i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance)); // Read in measurement
-		Timer.delay(0.005); // Delay to prevent over polling
 		samples++;
 		SmartDashboard.putNumber("LIDAR Counter",samples);
 		if(getDistance()>0)
 		{
+			Robot.g_nSequenceLidar++;
+			Robot.g_lidarDistanceCentimeters = getDistance();
 		SmartDashboard.putNumber("LIDAR Distance",getDistance());
 		}
 		else errors++;
