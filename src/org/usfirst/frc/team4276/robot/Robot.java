@@ -26,6 +26,10 @@ public class Robot extends IterativeRobot {
 	public static boolean g_isVisionSystemGoalDetected = false;
 	public static double g_visionSystemAngleRobotToGoal = -181.0;
 
+	public static boolean g_isImuDataValid = false;
+	public static double g_imuYawDegrees = -181.00;
+
+	
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -44,6 +48,8 @@ public class Robot extends IterativeRobot {
     	JVisionSystemReceiverRunnable visionSystemRunnable = new JVisionSystemReceiverRunnable();
         Thread visionSystemThread = new Thread(visionSystemRunnable);
         visionSystemThread.start();   
+        
+        ADIS16448_IMU imu = new ADIS16448_IMU();
     }
 
     /**
