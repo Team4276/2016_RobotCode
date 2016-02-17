@@ -13,7 +13,7 @@ public class Shooter {
 	
 	public Shooter()
 	{
-		shootermotor = new Talon(9);
+		shootermotor = new Talon(8);
 		joy=new Joystick(3);
 		autoshooter = new AutoShoot();
 	}

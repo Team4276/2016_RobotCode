@@ -3,13 +3,13 @@ package org.usfirst.frc.team4276.robot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Encoder; 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.RumbleType;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Arm {
-	  static Talon controller1;
-	  static Talon controller2;
+	  static Talon Pivoter;
 	  static Joystick joystick; 
 	  static Encoder enc; 
 	 static Encoder encode;
@@ -22,61 +22,57 @@ public class Arm {
 	  
 	  
 	
-	public Arm (int power1, int power2, int rel, int lim) 
+	public Arm (int power, int rel, int lim) 
 	{
-		controller1 = new Talon ( power1);
-		controller2 = new Talon ( power2);
-		encode = new Encoder(2,3);
-		encode.setDistancePerPulse(1);
-		encode.reset();
+		Pivoter = new Talon ( power);
 		enc = new Encoder(0,1);
 		enc.setDistancePerPulse(.362);
 		enc.reset();
+		encode = new Encoder(8,9);
+		encode.setDistancePerPulse(1);
+		encode.reset();
 		joystick = new Joystick (3);
 		relayer = new Talon(rel);
 		limiter = new DigitalInput(lim);
-		//relay = new Talon(rely);
 		
 		
-	}
-
-	
-	static void Prime()
-	{
-		
-		double actualDegree = 90 - enc.getDistance(); 
-        double staticMotor =  Math.cos(actualDegree)*.30625; 
-        double activeMotor = (joystick.getRawAxis(XBox.LStickY))/2; 
-        double motorPower = activeMotor ; 
-        
-        controller1.set(-motorPower);
-        controller2.set(motorPower);
-        
-        SmartDashboard.putNumber("Arm Degree", actualDegree);
-        
 	}
 	
 	
 	public void collector()
 	
 	{
+		SmartDashboard.putBoolean("LIMIT SWITCH", limiter.get());
 		double dif = Math.abs(speed) - Math.abs(encode.getRate());
 		double k=.03;
 		double deadband = .1;
-		if(joystick.getRawButton(XBox.RB) && limiter.get())
+		if(joystick.getRawButton(XBox.RB) && !limiter.get())
 		{
 			spinfor = true;
 			spinaft = false;
+			joystick.setRumble(RumbleType.kLeftRumble, 0);
+			joystick.setRumble(RumbleType.kLeftRumble, 0);
+		}
+		else if(joystick.getRawButton(XBox.RB) && limiter.get())
+		{
+			spinfor=false;
+			spinaft=false;
+			joystick.setRumble(RumbleType.kLeftRumble, 1);
+			joystick.setRumble(RumbleType.kLeftRumble, 1);
 		}
 		else if(joystick.getRawButton(XBox.LB))
 		{
 			spinfor=false;
 			spinaft=true;	
+			joystick.setRumble(RumbleType.kLeftRumble, 0);
+			joystick.setRumble(RumbleType.kLeftRumble, 0);
 		}
 		else 
 		{
 			spinfor=false;
 			spinaft=false;
+			joystick.setRumble(RumbleType.kLeftRumble, 0);
+			joystick.setRumble(RumbleType.kLeftRumble, 0);
 		}
 		
 		 
@@ -109,86 +105,9 @@ public class Arm {
 			}
 		
 		relayer.set(speed);
-		/*
-		if (relayer.get()< 0)
-		{
-			if(joystick.getRawButton(XBox.A))
-			{
-				relayer.set(1);
-				
-			}
-			if(joystick.getRawButton(XBox.Y))
-			{
-				relayer.set(0);
-				
-			}
 		
-		}
-		if (relayer.get() == 0)
-		{
-			if(joystick.getRawButton(XBox.A))
-			{
-				relayer.set(1);
-				
-			}
-			if(joystick.getRawButton(XBox.Y))
-			{
-				relayer.set(-1);
-				
-			}
-		}
-		if(joystick.getRawButton(XBox.X))
-		{
-		relayer.set(0);
-		}*/
 	}
-public void Spinner()
-	
-	{
-		if (relay.get() > 0)
-		{
-		if (joystick.getRawButton(XBox.LTrigger))
-		{
-			relay.set(0);
-		}
-		else if (joystick.getRawButton(XBox.RTrigger))
-		{
-			relay.set(-1);
-		
-		}
-		}
-		if (relay.get()< 0)
-		{
-			if(joystick.getRawButton(XBox.A))
-			{
-				relay.set(1);
-				
-			}
-			if(joystick.getRawButton(XBox.Y))
-			{
-				relay.set(0);
-				
-			}
-		
-		}
-		if (relay.get() == 0)
-		{
-			if(joystick.getRawButton(XBox.A))
-			{
-				relay.set(1);
-				
-			}
-			if(joystick.getRawButton(XBox.Y))
-			{
-				relayer.set(-1);
-				
-			}
-		}
-		if(joystick.getRawButton(XBox.X))
-		{
-		relay.set(0);
-		}
-	}
+
 
 static void autoRun(double speed)
 {

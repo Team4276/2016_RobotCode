@@ -16,7 +16,7 @@ public class LidarSpin {
 	public LidarSpin(int one)
 	{
 		spinner = new VictorSP(one);
-		enc1 = new Encoder(4,3);
+		enc1 = new Encoder(2,3);
 		enc1.reset();
 		enc1.setDistancePerPulse(0.724346);
 	}

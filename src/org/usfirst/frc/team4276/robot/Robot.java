@@ -29,7 +29,6 @@ public class Robot extends IterativeRobot {
 	public static boolean g_isImuDataValid = false;
 	public static double g_imuYawDegrees = -181.00;
 
-	
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -37,19 +36,17 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 
     	driver = new TankDrive(3,0,4,1,5,2);
-    	//armer = new Arm(6,7,4);
-    	//spinny = new LidarSpin(10);
-    	mylid = new LIDAR(Port.kMXP);
-    	mylid.start(20);
+    	armer = new Arm(6,7,4);
+    	//spinny = new LidarSpin(9);
+    	//mylid = new LIDAR(Port.kMXP);
+    	//mylid.start(20);
     	shoot = new Shooter();
     	//lead = new LEDOut(9,8,7,6);
     	
-    	//
-    	JVisionSystemReceiverRunnable visionSystemRunnable = new JVisionSystemReceiverRunnable();
-        Thread visionSystemThread = new Thread(visionSystemRunnable);
-        visionSystemThread.start();   
-        
-        ADIS16448_IMU imu = new ADIS16448_IMU();
+    	
+    	//JVisionSystemReceiverRunnable visionSystemRunnable = new JVisionSystemReceiverRunnable();
+        //Thread visionSystemThread = new Thread(visionSystemRunnable);
+        //visionSystemThread.start();   
     }
 
     /**
@@ -65,12 +62,12 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	
     	
-    	
-    	//armer.Prime();
-    	//armer.Spin();
+
+    	armer.collector();
     	//spinny.spinnerex();
+    	driver.Powermode();
     	driver.Drive();
-    	//driver.drive();
+    	driver.drive();
     	driver.fullpower();
     	shoot.run();
     	//lead.output();
