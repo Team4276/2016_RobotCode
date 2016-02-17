@@ -4,6 +4,8 @@
  */
 package org.usfirst.frc.team4276.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *
  * @author viking
@@ -34,8 +36,8 @@ public class JVisionSystemReceiverRunnable implements Runnable
                 Robot.g_isVisionSystemGoalDetected = m_visionSystemTargetInfo.m_isUpperGoalFound;
                 Robot.g_visionSystemAngleRobotToGoal = m_visionSystemTargetInfo.m_angleFromStraightAheadToUpperGoal;
                 
-                // TODO:  Send data to driver station
-                
+        		SmartDashboard.putBoolean("isVisionSystemGoalDetected",Robot.g_isVisionSystemGoalDetected); 
+        		SmartDashboard.putNumber("visionSystemAngleRobotToGoal",Robot.g_visionSystemAngleRobotToGoal);                
             }
             else
             {

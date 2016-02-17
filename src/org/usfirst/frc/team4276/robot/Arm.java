@@ -5,36 +5,43 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Arm {
-	  Talon controller1;
-	  Talon controller2;
-	  Joystick joystick; 
-	  Encoder enc; 
-	  Talon relayer;
+	  static Talon controller1;
+	  static Talon controller2;
+	  static Joystick joystick; 
+	  static Encoder enc; 
+	 static Encoder encode;
+	 static Talon relayer;
+	 static DigitalInput limiter;
 	  boolean spinfor = false;
 	  boolean spinaft = false;
-	  boolean pressed=false;
+	  double speed = 0;
 	  Talon relay;
 	  
 	  
 	
-	public Arm (int power1, int power2, int rel) 
+	public Arm (int power1, int power2, int rel, int lim) 
 	{
 		controller1 = new Talon ( power1);
 		controller2 = new Talon ( power2);
+		encode = new Encoder(2,3);
+		encode.setDistancePerPulse(1);
+		encode.reset();
 		enc = new Encoder(0,1);
 		enc.setDistancePerPulse(.362);
 		enc.reset();
 		joystick = new Joystick (3);
 		relayer = new Talon(rel);
+		limiter = new DigitalInput(lim);
 		//relay = new Talon(rely);
 		
 		
 	}
 
 	
-	public void Prime()
+	static void Prime()
 	{
 		
 		double actualDegree = 90 - enc.getDistance(); 
@@ -49,60 +56,60 @@ public class Arm {
         
 	}
 	
-	public void Spin()
+	
+	public void collector()
 	
 	{
-		if((joystick.getRawButton(XBox.LB)||joystick.getRawButton(XBox.RB))&&!pressed)
+		double dif = Math.abs(speed) - Math.abs(encode.getRate());
+		double k=.03;
+		double deadband = .1;
+		if(joystick.getRawButton(XBox.RB) && limiter.get())
 		{
-			pressed=true;
-			
-			if(joystick.getRawButton(XBox.LB))
-			{
-					spinfor=!spinfor;
-					spinaft=false;
-			}
-			else if(joystick.getRawButton(XBox.RB))
-					{
-							spinaft=!spinaft;
-							spinfor=false;
-					}
+			spinfor = true;
+			spinaft = false;
 		}
-		else if((!joystick.getRawButton(XBox.LB))&&(!joystick.getRawButton(XBox.RB)))
+		else if(joystick.getRawButton(XBox.LB))
 		{
-			pressed=false;
+			spinfor=false;
+			spinaft=true;	
+		}
+		else 
+		{
+			spinfor=false;
+			spinaft=false;
 		}
 		
-				
-		
-		if(joystick.getRawAxis(XBox.RTrigger)>0.5)
-		{
-			relayer.set(1);}
-			else{
+		 
 		if(spinfor)
 		{
-			relayer.set(.5);
+			if(speed == .5 || speed == 0 ||speed == -.5)
+			{
+			speed = .5;
+			}
 		}
 		else if(spinaft)
 		{
-			relayer.set(-.5);
+			if(speed == .5 || speed == 0 ||speed == -.5)
+			{
+			speed = -.5;
+			}
 		}
-		else relayer.set(0);
-		
-		
-	}
-		/*if (relayer.get() > 0)
+		else
 		{
-		if (joystick.getRawButton(XBox.A))
-		{
-			relayer.set(0);
-			;
+			speed = 0;
 		}
-		else if (joystick.getRawButton(XBox.Y))
-		{
-			relayer.set(-1);
 		
+			if(dif > deadband && speed > 0)
+		{
+			speed+=dif*k;
 		}
-		}
+			else if(dif > deadband && speed < 0)
+			{
+				speed-=dif*k;
+			}
+		
+		relayer.set(speed);
+		/*
 		if (relayer.get()< 0)
 		{
 			if(joystick.getRawButton(XBox.A))
@@ -143,7 +150,6 @@ public void Spinner()
 		if (joystick.getRawButton(XBox.LTrigger))
 		{
 			relay.set(0);
-			;
 		}
 		else if (joystick.getRawButton(XBox.RTrigger))
 		{
@@ -183,6 +189,11 @@ public void Spinner()
 		relay.set(0);
 		}
 	}
+
+static void autoRun(double speed)
+{
+	relayer.set(speed);
+}
 	
 	
 	

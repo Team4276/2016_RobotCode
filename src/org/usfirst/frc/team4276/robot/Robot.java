@@ -37,12 +37,12 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 
     	driver = new TankDrive(3,0,4,1,5,2);
-    	//armer = new Arm(6,7,8);
+    	//armer = new Arm(6,7,4);
     	//spinny = new LidarSpin(10);
     	mylid = new LIDAR(Port.kMXP);
     	mylid.start(20);
     	shoot = new Shooter();
-    	lead = new LEDOut(9,8,7,6);
+    	//lead = new LEDOut(9,8,7,6);
     	
     	//
     	JVisionSystemReceiverRunnable visionSystemRunnable = new JVisionSystemReceiverRunnable();
@@ -73,7 +73,7 @@ public class Robot extends IterativeRobot {
     	//driver.drive();
     	driver.fullpower();
     	shoot.run();
-    	lead.output();
+    	//lead.output();
         
     }
     

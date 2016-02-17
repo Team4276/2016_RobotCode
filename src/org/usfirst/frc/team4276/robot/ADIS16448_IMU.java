@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -460,6 +461,9 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWind
         
   	  	Robot.g_imuYawDegrees = m_yaw;
   	    Robot.g_isImuDataValid = true;
+		SmartDashboard.putBoolean("isImuDataValid",Robot.g_isImuDataValid);                
+		SmartDashboard.putNumber("imuYawDegrees",Robot.g_imuYawDegrees); 
+
       }
     }
   }
