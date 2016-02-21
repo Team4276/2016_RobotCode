@@ -18,7 +18,9 @@ public class AutoShoot extends Thread implements Runnable {
 	{
 		try
 		{
+			Arm.autoRun_In_Progress=true;
 			timedShoot();
+			Arm.autoRun_In_Progress=false;
 		}
 		
 		
@@ -30,6 +32,7 @@ public class AutoShoot extends Thread implements Runnable {
 	
 	public void timedShoot()
 	{
+		
 		Arm.autoRun(-.8); //Run Arm backwards for 1 second
 		Timer.delay(.3141);
 		Arm.autoRun(0); //Turn off Arm

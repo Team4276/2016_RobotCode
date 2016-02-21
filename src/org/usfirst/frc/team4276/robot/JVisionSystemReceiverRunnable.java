@@ -1,3 +1,7 @@
+package org.usfirst.frc.team4276.robot;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *
  * @author viking

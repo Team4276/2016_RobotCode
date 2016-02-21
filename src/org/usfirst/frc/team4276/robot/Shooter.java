@@ -1,19 +1,24 @@
 package org.usfirst.frc.team4276.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class Shooter {
 	
-	static Talon shootermotor;
+	static VictorSP shootermotor1,shootermotor2;
 	Joystick joy;
 	AutoShoot autoshooter;
+	Encoder shooterenc;
 	boolean started=false;
 	
-	public Shooter()
+	public Shooter(int shooterl,int shooterr,int shooterenc1,int shooterenc2)
 	{
-		shootermotor = new Talon(8);
+		shootermotor1 = new VictorSP(shooterl);
+		shootermotor2 = new VictorSP(shooterr);
+		shooterenc = new Encoder(shooterenc1,shooterenc2);
 		joy=new Joystick(3);
 		autoshooter = new AutoShoot();
 	}
@@ -27,19 +32,20 @@ public class Shooter {
 			
 		if(!autoshooter.isAlive())
 				started=false;
-		if(joy.getRawButton(XBox.A))
+		if(joy.getRawAxis(XBox.RTrigger)>0.5)
 		{
 			if(autoshooter.isAlive())
 				autoshooter.interrupt();
-			shootermotor.set(1);
+			shootermotor1.set(1);
+			shootermotor2.set(-1);
 			started=false;
 			
 		}
-		else if(joy.getRawButton(XBox.B))
+		else if(joy.getRawAxis(XBox.RTrigger)<0.5&&!autoshooter.isAlive())
 		{
-			if(autoshooter.isAlive())
-				autoshooter.interrupt();
-			shootermotor.set(0);
+			
+			shootermotor1.set(0);
+			shootermotor2.set(0);
 			started=false;
 			
 		}
@@ -60,9 +66,14 @@ public class Shooter {
 	static void set(boolean shooteron)
 	{
 		if(shooteron)
-			shootermotor.set(1);
-		else
-			shootermotor.set(0);
+		{
+			shootermotor1.set(1);
+			shootermotor2.set(-1);
+			}
+		else{
+			shootermotor1.set(0);
+			shootermotor2.set(0);
+		}
 	}
 
 }

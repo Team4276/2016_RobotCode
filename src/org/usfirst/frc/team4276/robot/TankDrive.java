@@ -1,7 +1,9 @@
 package org.usfirst.frc.team4276.robot;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TankDrive {
 	
@@ -18,8 +20,9 @@ public class TankDrive {
 	double rightpower;
 	double leftpower;
 	double mode = 1;
+	Encoder driveenc;
 	
-	public TankDrive(int fr, int fl, int mr, int ml, int br, int bl)
+	public TankDrive(int fr, int mr, int br, int fl, int ml, int bl,int enc1,int enc2)
 	{
 		FR = new Talon(fr);
 		MR = new Talon(mr);
@@ -27,12 +30,15 @@ public class TankDrive {
 		FL = new Talon(fl);
 		ML = new Talon(ml);
 		BL = new Talon(bl);
+		driveenc=new Encoder(enc1,enc2);
 		JL = new Joystick(0);
 		JR = new Joystick(1);
 		time = new Timer();
 		time.reset();
 		time.start();
 		tick=time.get();
+		driveenc.setDistancePerPulse(1);
+		driveenc.reset();
 	}
 	
 	public void Drive()
@@ -52,6 +58,7 @@ public class TankDrive {
 			leftpower=0;
 			
 		}
+		
 	}
 	
 	public void Powermode()
@@ -113,6 +120,35 @@ public class TankDrive {
 		FL.set(-leftpower);
 		ML.set(-leftpower);
 		BL.set(-leftpower);
+		
+		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
+	}
+	public boolean autodrive(int dist, double power)
+	{
+		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
+		
+		if(driveenc.getDistance()<dist)
+		{
+			FR.set(power);			
+			MR.set(power);
+			BR.set(power);
+			FL.set(-power);
+			ML.set(-power);
+			BL.set(-power);
+			return false;
+		}
+		else
+		{
+			FR.set(0);			
+			MR.set(0);
+			BR.set(0);
+			FL.set(0);
+			ML.set(0);
+			BL.set(0);
+			return true;
+		}
+		
+		
 	}
 	public void drive()
 	{

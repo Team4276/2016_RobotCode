@@ -1,9 +1,11 @@
 
 package org.usfirst.frc.team4276.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,6 +21,9 @@ public class Robot extends IterativeRobot {
 	LIDAR mylid;
 	Shooter shoot;
 	LEDOut lead;
+	Encoder enc;
+	Timer autotimer;
+	
 	public static int g_nSequenceLidar = 0;
 	public static double g_lidarDistanceCentimeters = 0.0;
 	
@@ -35,12 +40,13 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 
-    	driver = new TankDrive(3,0,4,1,5,2);
-    	armer = new Arm(6,7,4);
+    	driver = new TankDrive(3,4,5,0,1,2,6,7); //RF,RM,RB,LF,LM,LB,DriveEnc1,DriveEnc2
+    	armer = new Arm(6,7,3,0,1,2); //PowerMotor,IntakeMotor,BallStopLimit,ArmEnc,ArmEnc,HallSwitch
+    	autotimer = new Timer();
     	//spinny = new LidarSpin(9);
     	//mylid = new LIDAR(Port.kMXP);
     	//mylid.start(20);
-    	shoot = new Shooter();
+    	shoot = new Shooter(8,9,4,5); //ShooterLeft,ShooterRight,enc1,enc2
     	//lead = new LEDOut(9,8,7,6);
     	
     	
@@ -53,6 +59,12 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	
+    	if(driver.autodrive(5, .4))
+    	{
+    		autotimer.reset();
+    		autotimer.start();
+    	}
 
     }
 
@@ -62,12 +74,12 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	
     	
-
+    	//SmartDashboard.putNumber("Encoder Value", enc.get());
     	armer.collector();
     	//spinny.spinnerex();
-    	driver.Powermode();
+    	//driver.Powermode();
     	driver.Drive();
-    	driver.drive();
+    	//driver.drive();
     	driver.fullpower();
     	shoot.run();
     	//lead.output();
