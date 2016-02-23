@@ -38,7 +38,7 @@ public class AutoShoot extends Thread implements Runnable {
 		Arm.autoRun(0); //Turn off Arm
 		
 		Shooter.set(true); //Turn on Shooter and wait 2 seconds
-		Timer.delay(2);
+		Timer.delay(1);
 		
 		
 		Arm.autoRun(1); //Run arm forwards and wait for 4 seconds

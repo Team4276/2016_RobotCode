@@ -20,7 +20,9 @@ public class TankDrive {
 	double rightpower;
 	double leftpower;
 	double mode = 1;
-	Encoder driveenc;
+	static Encoder driveenc;
+
+	
 	
 	public TankDrive(int fr, int mr, int br, int fl, int ml, int bl,int enc1,int enc2)
 	{
@@ -39,13 +41,20 @@ public class TankDrive {
 		tick=time.get();
 		driveenc.setDistancePerPulse(1);
 		driveenc.reset();
+
 	}
 	
-	public void Drive()
+	public void run()
 	{
 		
 		
-		
+		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
+		SmartDashboard.putNumber("X", IMU.imu.getAccelX());
+    	SmartDashboard.putNumber("Y", IMU.imu.getAccelY());
+    	SmartDashboard.putNumber("Z", IMU.imu.getAccelZ());
+    	SmartDashboard.putNumber("Yaw: ", IMU.imu.getYaw());
+    	SmartDashboard.putNumber("Yaw Rate: ", IMU.imu.getRateZ());
+
 		if(Math.abs(JR.getY()) > .2 || Math.abs(JL.getY()) > .2)
 		{
 			rightpower = JR.getY();
@@ -58,6 +67,8 @@ public class TankDrive {
 			leftpower=0;
 			
 		}
+		
+		fullpower();
 		
 	}
 	
@@ -125,16 +136,37 @@ public class TankDrive {
 	}
 	public boolean autodrive(int dist, double power)
 	{
+		
+		double yawrate = IMU.imu.getRateZ();
+		double k=0.004;
 		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
+		SmartDashboard.putNumber("Yaw Rate: ", IMU.imu.getRateZ());
+		
+		
+		
+		double Rpower = power;
+		double Lpower = power;
+		
+		
+		if(yawrate>0) // Driving to the right
+		{
+			Lpower = Lpower - yawrate*k-.1;
+		}
+		if(yawrate<0) // Driving to the right
+		{
+			Rpower = Rpower - Math.abs(yawrate)*k;
+		}
+		SmartDashboard.putNumber("LPower: ", Lpower);
+		SmartDashboard.putNumber("RPower: ", Rpower);
 		
 		if(driveenc.getDistance()<dist)
 		{
-			FR.set(power);			
-			MR.set(power);
-			BR.set(power);
-			FL.set(-power);
-			ML.set(-power);
-			BL.set(-power);
+			FR.set(-Rpower);			
+			MR.set(-Rpower);
+			BR.set(-Rpower);
+			FL.set(Lpower);
+			ML.set(Lpower);
+			BL.set(Lpower);
 			return false;
 		}
 		else
