@@ -14,9 +14,11 @@ public class DashboardOutput extends Thread implements Runnable{
 	
 	public void run()
 	{
+		
 		while(true)
 		{
-			Timer.delay(.005);
+			try{
+			Timer.delay(.05);
 			SmartDashboard.putNumber("X", IMU.imu.getAccelX());
         	SmartDashboard.putNumber("Y", IMU.imu.getAccelY());
         	SmartDashboard.putNumber("Z", IMU.imu.getAccelZ());
@@ -36,8 +38,17 @@ public class DashboardOutput extends Thread implements Runnable{
         	SmartDashboard.putNumber("Drive Encoder: ", TankDrive.driveenc.getDistance());
         	
         	SmartDashboard.putNumber("Shooter Encoder: ", Shooter.shooterenc.getRate());
+        	
+        	SmartDashboard.putNumber("Auto Mode: ", AutoModeSwitch.getswitchvalue());
+        	SmartDashboard.putString("Output Error: ", "None");
+			}
+			catch(Exception e)
+			{
+				SmartDashboard.putString("Output Error: ", "Error!");
+			}
 
 		}
+		
 	}
 
 }

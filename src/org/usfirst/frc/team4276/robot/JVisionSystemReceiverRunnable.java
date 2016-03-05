@@ -23,11 +23,12 @@ public class JVisionSystemReceiverRunnable implements Runnable
         m_continueRunning = true;
         while(m_continueRunning) 
         {
+            Robot.g_visionSystemPixelX = m_visionSystemTargetInfo.m_pixelX;
             textInput = m_visionSystemReceiver.getOneLineFromSocket();
             if(textInput != null)
             {
                 Robot.g_nSequenceVisionSystem++;
-                m_visionSystemTargetInfo.initTargetInfoFromText(textInput);
+                SmartDashboard.putNumber("visionSystemPixelX",Robot.g_visionSystemPixelX);                
                 //System.out.println(textInput);
                 Robot.g_isVisionSystemGoalDetected = m_visionSystemTargetInfo.m_isUpperGoalFound;
                 Robot.g_visionSystemAngleRobotToGoal = m_visionSystemTargetInfo.m_angleFromStraightAheadToUpperGoal;
