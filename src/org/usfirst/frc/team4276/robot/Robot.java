@@ -3,6 +3,7 @@ package org.usfirst.frc.team4276.robot;
 
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,8 +50,8 @@ public class Robot extends SampleRobot {
     	autotimer = new Timer();
     	//imu = new ADIS16448_IMU();
     	//spinny = new LidarSpin(9);
-    	//mylid = new LIDAR(Port.kMXP);
-    	//mylid.start(20);
+    	mylid = new LIDAR(Port.kMXP);
+    	mylid.start(20);
     	shoot = new Shooter(8,9,4,5); //ShooterLeft,ShooterRight,enc1,enc2
     	//led = new LEDOut(20,19,18,27);
        // dash = new DashboardOutput();

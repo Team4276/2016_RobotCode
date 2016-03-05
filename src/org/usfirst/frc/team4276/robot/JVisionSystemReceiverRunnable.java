@@ -18,12 +18,13 @@ public class JVisionSystemReceiverRunnable implements Runnable
         m_visionSystemReceiver = new JReceiver();
         m_visionSystemTargetInfo = new JTargetInfo();
         m_visionSystemReceiver.init();
+  
+        SmartDashboard.putNumber("visionSystemPixelX",Robot.g_visionSystemPixelX);                
 
         String textInput;
         m_continueRunning = true;
         while(m_continueRunning) 
         {
-            Robot.g_visionSystemPixelX = m_visionSystemTargetInfo.m_pixelX;
             textInput = m_visionSystemReceiver.getOneLineFromSocket();
             if(textInput != null)
             {
