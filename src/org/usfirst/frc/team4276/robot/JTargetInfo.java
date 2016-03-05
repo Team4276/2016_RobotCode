@@ -13,7 +13,7 @@ public class JTargetInfo {
 
     boolean m_isUpperGoalFound;
     double m_angleFromStraightAheadToUpperGoal;
-    double m_distanceToUpperGoal;
+	double m_distanceToUpperGoal;
     double m_pixelX;
     
     int commaPos;
@@ -36,6 +36,7 @@ public class JTargetInfo {
         m_isUpperGoalFound = false;
         m_angleFromStraightAheadToUpperGoal = 0.0;
         m_distanceToUpperGoal = 0.0;
+        m_pixelX = -1.0;
 
         commaPos = 0;
         word = "";
@@ -85,6 +86,9 @@ public class JTargetInfo {
         setAngleFromStraightAheadToUpperGoal(iTemp);
         
         iTemp = Integer.parseInt(items[2]);
-        setDistanceToUpperGoal(iTemp);
+		setDistanceToUpperGoal(iTemp);
+        
+        iTemp = Integer.parseInt(items[3]);
+        setPixelX(iTemp);
     }
 }

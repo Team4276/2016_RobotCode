@@ -21,7 +21,7 @@ public class Robot extends SampleRobot {
 	DashboardOutput dash;
 	CameraServer camera;
 	IMU myIMU;
-	AutoModeSwitch automodeswitch;
+	
 	
 	//ADIS16448_IMU imu;
 	public static int g_nSequenceLidar = 0;
@@ -50,9 +50,8 @@ public class Robot extends SampleRobot {
     	//led = new LEDOut(20,19,18,27);
        // dash = new DashboardOutput();
     	myIMU = new IMU();
-    	automodeswitch = new AutoModeSwitch();
+
     	dash = new DashboardOutput();
-    	
         
     }
     

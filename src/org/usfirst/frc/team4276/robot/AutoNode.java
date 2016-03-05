@@ -46,7 +46,7 @@ public class AutoNode {
 	void NodeEnd()
 	{
 		TankDrive.autodrive(0, 0, 0);
-		//ArmPID.armangle(0);
+		ArmPID.armangle(0);
 	}
 	
 }

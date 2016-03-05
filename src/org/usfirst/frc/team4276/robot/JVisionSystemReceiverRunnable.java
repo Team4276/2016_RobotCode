@@ -35,6 +35,7 @@ public class JVisionSystemReceiverRunnable implements Runnable
                 
                 SmartDashboard.putBoolean("isVisionSystemGoalDetected",Robot.g_isVisionSystemGoalDetected); 
                 SmartDashboard.putNumber("visionSystemAngleRobotToGoal",Robot.g_visionSystemAngleRobotToGoal);                
+                SmartDashboard.putNumber("visionSystemPixelX",Robot.g_visionSystemPixelX);                
             }
             else
             {
