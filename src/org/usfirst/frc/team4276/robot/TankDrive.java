@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TankDrive {
 	
-	Talon FR;
-	Talon MR;
-	Talon BR;
-	Talon FL;
-	Talon ML;
-	Talon BL;
+	static Talon FR;
+	static Talon MR;
+	static Talon BR;
+	static Talon FL;
+	static Talon ML;
+	static Talon BL;
 	Joystick JR;
 	Joystick JL;
 	Timer time;
@@ -20,7 +20,9 @@ public class TankDrive {
 	double rightpower;
 	double leftpower;
 	double mode = 1;
-	Encoder driveenc;
+	static Encoder driveenc;
+
+	
 	
 	public TankDrive(int fr, int mr, int br, int fl, int ml, int bl,int enc1,int enc2)
 	{
@@ -39,13 +41,20 @@ public class TankDrive {
 		tick=time.get();
 		driveenc.setDistancePerPulse(1);
 		driveenc.reset();
+
 	}
 	
-	public void Drive()
+	public void run()
 	{
 		
 		
-		
+		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
+		SmartDashboard.putNumber("X", IMU.imu.getAccelX());
+    	SmartDashboard.putNumber("Y", IMU.imu.getAccelY());
+    	SmartDashboard.putNumber("Z", IMU.imu.getAccelZ());
+    	SmartDashboard.putNumber("Yaw: ", IMU.imu.getYaw());
+    	SmartDashboard.putNumber("Yaw Rate: ", IMU.imu.getRateZ());
+
 		if(Math.abs(JR.getY()) > .2 || Math.abs(JL.getY()) > .2)
 		{
 			rightpower = JR.getY();
@@ -58,6 +67,8 @@ public class TankDrive {
 			leftpower=0;
 			
 		}
+		
+		fullpower();
 		
 	}
 	
@@ -123,18 +134,49 @@ public class TankDrive {
 		
 		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
 	}
-	public boolean autodrive(int dist, double power)
+	static boolean autodrive(double dist, double power, double desiredangle)
 	{
+		double deadband = .05;
+		double biaz = .1;
+		double dif = IMU.imu.getAngleZ() - desiredangle;
+		double k=0.004;
 		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
+		SmartDashboard.putNumber("Yaw", IMU.imu.getAngleZ());
+		
+		
+		
+		double Rpower = power;
+		double Lpower = power;
+		
+		
+		if(dif> deadband) // Driving to the right
+		{
+			Lpower = Lpower - dif*k;
+		}
+		if(dif< -1*deadband) // Driving to the left
+		{
+			Rpower = Rpower - Math.abs(dif)*k;
+		}
+		SmartDashboard.putNumber("LPower: ", Lpower);
+		SmartDashboard.putNumber("RPower: ", Rpower);
 		
 		if(driveenc.getDistance()<dist)
 		{
-			FR.set(power);			
-			MR.set(power);
-			BR.set(power);
-			FL.set(-power);
-			ML.set(-power);
-			BL.set(-power);
+			FR.set(-Rpower);			
+			MR.set(-Rpower);
+			BR.set(-Rpower);
+			FL.set(Lpower);
+			ML.set(Lpower);
+			BL.set(Lpower);
+			return false;
+		} else if(dist == 0 && dif > deadband)
+		{
+			FR.set(dif/180);			
+			MR.set(dif/180);
+			BR.set(dif/180);
+			FL.set(dif/180);
+			ML.set(dif/180);
+			BL.set(dif/180);
 			return false;
 		}
 		else
