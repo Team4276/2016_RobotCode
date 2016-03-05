@@ -30,6 +30,7 @@ public class Robot extends IterativeRobot {
 	public static int g_nSequenceVisionSystem = 0;
 	public static boolean g_isVisionSystemGoalDetected = false;
 	public static double g_visionSystemAngleRobotToGoal = -181.0;
+	public static double g_visionSystemPixelX = -1.0;
 
 	public static boolean g_isImuDataValid = false;
 	public static double g_imuYawDegrees = -181.00;

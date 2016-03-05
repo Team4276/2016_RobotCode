@@ -31,9 +31,11 @@ public class JVisionSystemReceiverRunnable implements Runnable
                 //System.out.println(textInput);
                 Robot.g_isVisionSystemGoalDetected = m_visionSystemTargetInfo.m_isUpperGoalFound;
                 Robot.g_visionSystemAngleRobotToGoal = m_visionSystemTargetInfo.m_angleFromStraightAheadToUpperGoal;
+                Robot.g_visionSystemPixelX = m_visionSystemTargetInfo.m_pixelX;
                 
                 SmartDashboard.putBoolean("isVisionSystemGoalDetected",Robot.g_isVisionSystemGoalDetected); 
                 SmartDashboard.putNumber("visionSystemAngleRobotToGoal",Robot.g_visionSystemAngleRobotToGoal);                
+                SmartDashboard.putNumber("visionSystemPixelX",Robot.g_visionSystemPixelX);                
             }
             else
             {
