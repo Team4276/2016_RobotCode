@@ -3,24 +3,24 @@ package org.usfirst.frc.team4276.robot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class ArmPID extends Thread implements Runnable{
 	
-	static DigitalInput SET_90_OPTICAL;
-	static double angle;
-	static double startang=110;	
-	static double setpoint = startang;
+	DigitalInput SET_90_OPTICAL;
+	
 	
 	public ArmPID(int hallswitch)
 	{
 		SET_90_OPTICAL = new DigitalInput(hallswitch);	
-		angle=startang;
 	}
 	
 	public void run()
 	{
-		double offset;		
+		double angle,offset;
+		double startang=120;
 		
+		double setpoint=startang;
 		double k=.02,deadband=2;
 		double power;
 		
@@ -50,16 +50,12 @@ public class ArmPID extends Thread implements Runnable{
 				else if(Arm.joystick.getRawAxis(XBox.LStickY)<-0.5)
 					setpoint+=3;
 				
-				if(setpoint>=120)
-					setpoint=120;
-				if(setpoint<=-20)
-					setpoint=-120;
 				if(Arm.joystick.getRawButton(XBox.Y))
-					setpoint=80;
+					setpoint=90;
 				if(Arm.joystick.getRawButton(XBox.B))
-					setpoint=5;
+					setpoint=45;
 				if(Arm.joystick.getRawButton(XBox.X))
-					setpoint=-10;
+					setpoint=0;
 				
 				SmartDashboard.putNumber("Arm Offset: ", offset);
 				SmartDashboard.putNumber("Setpoint: ", setpoint);

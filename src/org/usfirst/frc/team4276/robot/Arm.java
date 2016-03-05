@@ -1,10 +1,12 @@
 package org.usfirst.frc.team4276.robot;
 
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Encoder; 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.*;
+import edu.wpi.first.wpilibj.Joystick.RumbleType;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -17,6 +19,7 @@ public class Arm {
 	  boolean spinfor = false;
 	  boolean spinaft = false;
 	  double speed = 0;
+	  Talon relay;
 	  ArmPID runArm;
 	  Timer balltime = new Timer();
 	  static boolean autoRun_In_Progress=false;
@@ -47,14 +50,14 @@ public class Arm {
 		//double k=.03;
 		//double deadband = .1;
 		
-		if(joystick.getRawButton(XBox.LB)&& limiter.get())
+		if(joystick.getRawButton(XBox.LB) )//&& !limiter.get())
 		{
 			spinfor = true;
 			spinaft = false;
 			joystick.setRumble(RumbleType.kLeftRumble, 0);
 			joystick.setRumble(RumbleType.kLeftRumble, 0);
 		}
-		else if(joystick.getRawButton(XBox.LB) && !limiter.get())
+		else if(joystick.getRawButton(XBox.LB) && limiter.get())
 		{
 			spinfor=false;
 			spinaft=false;
@@ -102,7 +105,6 @@ public class Arm {
 			{
 				speed-=dif*k;
 			}*/
-		SmartDashboard.putBoolean("AutoRun In PRog", autoRun_In_Progress);
 		if(!autoRun_In_Progress)
 			relayer.set(speed);
 		

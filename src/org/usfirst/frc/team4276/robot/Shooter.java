@@ -3,14 +3,15 @@ package org.usfirst.frc.team4276.robot;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Shooter {
 	
 	static VictorSP shootermotor1,shootermotor2;
 	Joystick joy;
-	static AutoShoot autoshooter;
-	static Encoder shooterenc;
+	AutoShoot autoshooter;
+	Encoder shooterenc;
 	boolean started=false;
 	
 	public Shooter(int shooterl,int shooterr,int shooterenc1,int shooterenc2)
@@ -20,13 +21,11 @@ public class Shooter {
 		shooterenc = new Encoder(shooterenc1,shooterenc2);
 		joy=new Joystick(3);
 		autoshooter = new AutoShoot();
-		shooterenc.setDistancePerPulse(-.001);
 	}
 	
 	void run()
 	{
 		SmartDashboard.putBoolean("Auto Shooter Started: ", autoshooter.isAlive());
-		SmartDashboard.putNumber("Shooter speed: ", shooterenc.getRate());
 		
 		
 		try{
@@ -37,7 +36,16 @@ public class Shooter {
 		{
 			if(autoshooter.isAlive())
 				autoshooter.interrupt();
-			set(true);
+			shootermotor1.set(1);
+			shootermotor2.set(-1);
+			started=false;
+			
+		}
+		else if(joy.getRawAxis(XBox.RTrigger)<0.5&&!autoshooter.isAlive())
+		{
+			
+			shootermotor1.set(0);
+			shootermotor2.set(0);
 			started=false;
 			
 		}
@@ -48,15 +56,7 @@ public class Shooter {
 			autoshooter=new AutoShoot();
 			autoshooter.start();
 			
-		}
-		else if(joy.getRawAxis(XBox.RTrigger)<0.5&&!autoshooter.isAlive())
-		{
-			
-			set(false);
-			started=false;
-			
-		}
-		}
+		}}
 		
 		catch(Exception e){
 			SmartDashboard.putBoolean("Exception Thrown: ", true);
@@ -65,21 +65,10 @@ public class Shooter {
 
 	static void set(boolean shooteron)
 	{
-		double k=0.01;
-		double nominalrate = 120; //rpm?
-		double currRate = shooterenc.getRate();
-		double diff = nominalrate - currRate;
-		
-		double speed = 0.8+diff*k;
-		if(speed>1)
-			speed=1;
-		SmartDashboard.putNumber("Shooter speed: ", shooterenc.getRate());
-		SmartDashboard.putNumber("SETSPEED: ", speed);
-
 		if(shooteron)
 		{
-			shootermotor1.set(speed);
-			shootermotor2.set(-speed);
+			shootermotor1.set(1);
+			shootermotor2.set(-1);
 			}
 		else{
 			shootermotor1.set(0);
