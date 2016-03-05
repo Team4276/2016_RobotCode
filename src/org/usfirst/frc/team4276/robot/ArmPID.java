@@ -8,25 +8,22 @@ public class ArmPID extends Thread implements Runnable{
 	
 	static DigitalInput SET_90_OPTICAL;
 	static double angle;
-	static double startang=110;	
+	static double startang=120;	
 	static double setpoint = startang;
-	static double ang;
 	
 	public ArmPID(int hallswitch)
 	{
 		SET_90_OPTICAL = new DigitalInput(hallswitch);	
 		angle=startang;
 	}
-	static void armangle(double armangle)
-	{
-		 ang = armangle;
-	}
+	
 	public void run()
 	{
 		double offset;		
 		
 		double k=.02,deadband=2;
 		double power;
+		double pitch;
 		
 		try
 		{
@@ -39,6 +36,7 @@ public class ArmPID extends Thread implements Runnable{
 				else {
 				angle=startang-(-1*Arm.enc.getDistance());
 				
+				//SmartDashboard.putNumber("PitchDrive: ", TankDrive.getPitch());
 				offset = setpoint - angle;
 				
 				if(Math.abs(offset)>deadband)
@@ -53,19 +51,15 @@ public class ArmPID extends Thread implements Runnable{
 					setpoint-=3;
 				else if(Arm.joystick.getRawAxis(XBox.LStickY)<-0.5)
 					setpoint+=3;
-				if (!(ang == 0))
-				{
-					setpoint = ang;
-				}
 				
-				if(setpoint>=120)
-					setpoint=120;
+				if(setpoint>=130)
+					setpoint=130;
 				if(setpoint<=-20)
-					setpoint=-120;
+					setpoint=-20;
 				if(Arm.joystick.getRawButton(XBox.Y))
-					setpoint=80;
+					setpoint=90;
 				if(Arm.joystick.getRawButton(XBox.B))
-					setpoint=5;
+					setpoint=0;
 				if(Arm.joystick.getRawButton(XBox.X))
 					setpoint=-10;
 				

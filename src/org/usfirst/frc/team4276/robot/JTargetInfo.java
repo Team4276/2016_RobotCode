@@ -14,6 +14,7 @@ public class JTargetInfo {
     boolean m_isUpperGoalFound;
     double m_angleFromStraightAheadToUpperGoal;
     double m_distanceToUpperGoal;
+    double m_pixelX;
     
     int commaPos;
     String word;
@@ -65,6 +66,14 @@ public class JTargetInfo {
 
     public double getDistanceToUpperGoal() {
         return m_distanceToUpperGoal;
+    }
+
+    public void setPixelX(double fnum) {
+        m_pixelX = fnum;
+    }
+
+    public double getPixelX() {
+        return m_pixelX;
     }
     
     public void initTargetInfoFromText(String txt) {

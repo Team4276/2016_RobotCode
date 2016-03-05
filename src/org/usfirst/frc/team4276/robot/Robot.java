@@ -3,6 +3,7 @@ package org.usfirst.frc.team4276.robot;
 
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +21,7 @@ public class Robot extends SampleRobot {
 	DashboardOutput dash;
 	CameraServer camera;
 	IMU myIMU;
-
+	AutoModeSwitch automodeswitch;
 	
 	//ADIS16448_IMU imu;
 	public static int g_nSequenceLidar = 0;
@@ -49,8 +50,8 @@ public class Robot extends SampleRobot {
     	//led = new LEDOut(20,19,18,27);
        // dash = new DashboardOutput();
     	myIMU = new IMU();
-    	//dash = new DashboardOutput();
-    	//dash.start();
+    	automodeswitch = new AutoModeSwitch();
+    	dash = new DashboardOutput();
     	
         
     }
@@ -58,7 +59,7 @@ public class Robot extends SampleRobot {
     public void robotInit() {
     	
     	
-    	
+    	dash.start();
     	
     	
     	
@@ -66,13 +67,9 @@ public class Robot extends SampleRobot {
 
 	
     public void autonomous() {
-    	drive.driveenc.reset();
-    	while(true)
-    	{
-    		if(drive.autodrive(3000, .8, 180.0))
-    				break;
-    		SmartDashboard.putString("Auto: ", "Running!");
-    	}
+    	
+    	
+    	
     	SmartDashboard.putString("Auto: ", "NOT!");
     	/*String autoSelected = (String) chooser.getSelected();
 //		String autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
@@ -106,8 +103,7 @@ public class Robot extends SampleRobot {
         	//spinny.spinnerex();
         	drive.run();
         	shoot.run();
-        	SmartDashboard.putNumber("Shooter speed: ", Shooter.shooterenc.getRate());
-        	
+        	       	
         	//lead.output();
         	
             

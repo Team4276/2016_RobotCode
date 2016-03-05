@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TankDrive {
 	
-	static Talon FR;
-	static Talon MR;
-	static Talon BR;
-	static Talon FL;
-	static Talon ML;
-	static Talon BL;
+	Talon FR;
+	Talon MR;
+	Talon BR;
+	Talon FL;
+	Talon ML;
+	Talon BL;
 	Joystick JR;
 	Joystick JL;
 	Timer time;
@@ -21,6 +21,7 @@ public class TankDrive {
 	double leftpower;
 	double mode = 1;
 	static Encoder driveenc;
+	static double pitch;
 
 	
 	
@@ -134,14 +135,13 @@ public class TankDrive {
 		
 		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
 	}
-	static boolean autodrive(double dist, double power, double desiredangle)
+	public boolean autodrive(int dist, double power)
 	{
-		double deadband = .05;
-		double biaz = .1;
-		double dif = IMU.imu.getAngleZ() - desiredangle;
+		
+		double yawrate = IMU.imu.getRateZ();
 		double k=0.004;
 		SmartDashboard.putNumber("Drive Encoder", driveenc.getDistance());
-		SmartDashboard.putNumber("Yaw", IMU.imu.getAngleZ());
+		SmartDashboard.putNumber("Yaw Rate: ", IMU.imu.getRateZ());
 		
 		
 		
@@ -149,13 +149,13 @@ public class TankDrive {
 		double Lpower = power;
 		
 		
-		if(dif> deadband) // Driving to the right
+		if(yawrate>0) // Driving to the right
 		{
-			Lpower = Lpower - dif*k;
+			Lpower = Lpower - yawrate*k-.1;
 		}
-		if(dif< -1*deadband) // Driving to the left
+		if(yawrate<0) // Driving to the right
 		{
-			Rpower = Rpower - Math.abs(dif)*k;
+			Rpower = Rpower - Math.abs(yawrate)*k;
 		}
 		SmartDashboard.putNumber("LPower: ", Lpower);
 		SmartDashboard.putNumber("RPower: ", Rpower);
@@ -168,15 +168,6 @@ public class TankDrive {
 			FL.set(Lpower);
 			ML.set(Lpower);
 			BL.set(Lpower);
-			return false;
-		} else if(dist == 0 && dif > deadband)
-		{
-			FR.set(dif/180);			
-			MR.set(dif/180);
-			BR.set(dif/180);
-			FL.set(dif/180);
-			ML.set(dif/180);
-			BL.set(dif/180);
 			return false;
 		}
 		else
@@ -202,6 +193,11 @@ public class TankDrive {
 		{
 			Powermode();
 		}
+	}
+	
+	public static double getPitch()
+	{
+		return IMU.imu.getPitch();
 	}
 	
 }

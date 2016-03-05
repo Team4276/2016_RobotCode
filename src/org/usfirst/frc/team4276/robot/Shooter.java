@@ -65,17 +65,19 @@ public class Shooter {
 
 	static void set(boolean shooteron)
 	{
-		double k=0.01;
-		double nominalrate = 120; //rpm?
+		double k=0.001 ;
+		double nominalrate = 165; //rpm?
 		double currRate = shooterenc.getRate();
 		double diff = nominalrate - currRate;
 		
-		double speed = 0.8+diff*k;
+		double speed = 0.9+diff*k;
 		if(speed>1)
 			speed=1;
+		speed=1;
+		if(currRate>0)
 		SmartDashboard.putNumber("Shooter speed: ", shooterenc.getRate());
-		SmartDashboard.putNumber("SETSPEED: ", speed);
-
+		SmartDashboard.putNumber("SETSPEED: ", shootermotor1.get());
+		
 		if(shooteron)
 		{
 			shootermotor1.set(speed);
